@@ -80,16 +80,83 @@ export const generateMovieGenre = () => {
   const randomIndexGenre = getRandomInteger(0, movieGenre.length - 1);
   return movieGenre[randomIndexGenre]; 
 };
-// функция генерации карточки фильма
+// функция генерации рандомного времени
+const getRandomDate = () => {
+  const gap = getRandomInteger(0, 365*10); 
+  const date = new Date();
+  date.setDate(date.getDate() - gap);
+  return date;
+}
+// функция генерации карточки фильма_________________________________
 export const generateFilmCards = () => {
   return {
     poster: generateMoviePoster(),
     title: generateMovieTitle(),
-    rating: getRandomInRange(1,10,1),
-    productionYear: getRandomInteger(2000,2021),
-    duration:`${resultHour}h ${resultMinute}m`,
+    originalTitle: generateMovieDescription(),
+    rating: getRandomInRange(1,9,1),
+    director: generateDirector(),
+    screenwriters: writersAndactors,
+    cast: writersAndactors,
+    releaseDate: getRandomDate(),
+    duration: getRandomDate(),  // `${resultHour}h ${resultMinute}m`
+    country: generateCountry(),
     genre: generateMovieGenre(),
     description: generateMovieDescription(),
-    numberOfComments: getRandomInteger(1,5),
+    ageRating: generateAgeRating(),
+    comments: quantityComments(),
   };
 };
+// функция генерации карточки фильма_________________________________
+
+// функция генерации возрастного рейтинга
+const generateAgeRating = () => {
+  const movieAgeRating = [
+    '0+',
+    '6+',
+    '12+',
+    '16+',
+    '18+'
+  ];
+  const randomIndexAgeRating = getRandomInteger(0, movieAgeRating.length - 1);
+  return movieAgeRating[randomIndexAgeRating]; 
+};
+// функция генерации страны
+const generateCountry = () => {
+  const countrys = [
+    'Russia',
+    'USA',
+    'New Zealand',
+    'Australia',
+    'Canada',
+    'United Kingdom'
+  ];
+  const randomIndexCountry = getRandomInteger(0, countrys.length - 1);
+  return countrys[randomIndexCountry]; 
+};
+// функция генерации режисера
+const generateDirector = () => {
+  const directors = [
+    'Glenn Ficarra',
+    'John Requa',
+    'Quentin Jerome Tarantino',
+    'Vaughn Stein',
+    'Josie Rourke',
+    'David Ayer'
+  ];
+  const randomIndexDirector = getRandomInteger(0, directors.length - 1);
+  return directors[randomIndexDirector]; 
+};
+// функция генерации сценаристов
+const generateScreenwriters = () => {
+  const screenwriters = [
+    'Glenn Ficarra',
+    'John Requa',
+    'Quentin Jerome Tarantino',
+    'Vaughn Stein',
+    'Josie Rourke',
+    'David Ayer'
+  ];
+  const randomIndexScreenwriters = getRandomInteger(0, screenwriters.length - 1);
+  return screenwriters[randomIndexScreenwriters]; 
+};
+const writersAndactors = new Array(getRandomInteger(1,7)).fill().map(generateScreenwriters);

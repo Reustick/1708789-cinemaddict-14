@@ -1,5 +1,5 @@
-export const createPopUp = (movie) => {
-  const {fullSizeCover, title, originalTitle, rating, director, screenwriters, cast, releaseDate, duration, country, genre, description, ageRating} = movie;
+import { formatDate } from '../util.js';
+export const createPopUp = ({poster, title, originalTitle, rating, director, screenwriters, cast, releaseDate, duration, country, genre, description, ageRating}) => {
   return `
   <div class="film-details__top-container">
   <div class="film-details__close">
@@ -7,7 +7,7 @@ export const createPopUp = (movie) => {
   </div>
   <div class="film-details__info-wrap">
     <div class="film-details__poster">
-      <img class="film-details__poster-img" src="${fullSizeCover}" alt="">
+      <img class="film-details__poster-img" src="${poster}" alt="">
       <p class="film-details__age">${ageRating}</p>
     </div>
     <div class="film-details__info">
@@ -35,11 +35,11 @@ export const createPopUp = (movie) => {
         </tr>
         <tr class="film-details__row">
           <td class="film-details__term">Release Date</td>
-          <td class="film-details__cell">${releaseDate}</td>
+          <td class="film-details__cell">${formatDate(releaseDate)}</td>
         </tr>
         <tr class="film-details__row">
           <td class="film-details__term">Runtime</td>
-          <td class="film-details__cell">${duration}</td>
+          <td class="film-details__cell">${duration.getHours()}h ${duration.getMinutes()}m</td>
         </tr>
         <tr class="film-details__row">
           <td class="film-details__term">Country</td>
