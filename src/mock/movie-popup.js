@@ -1,21 +1,21 @@
-import { getRandomInteger, getRandomInRange } from "./util.js";
-import { resultHour, resultMinute, generateMoviePoster, generateMovieTitle, generateMovieDescription } from "./card-film.js";
+import { getRandomInteger, getRandomInRange } from "../util.js";
+import { resultHour, resultMinute, resultDay, resultYear, generateMoviePoster, generateMovieTitle, generateMovieDescription, generateMovieGenre } from "./card-for-film.js";
 // функция генерации попапа
-const generateMoviePopup = () => {
+export const generateMoviePopup = () => {
   return {
     fullSizeCover: generateMoviePoster(),
     title: generateMovieTitle(),
     originalTitle: generateMovieDescription(),
     rating: getRandomInRange(1,10,1),
     director: generateDirector(),
-    screenwriters:
-    cast:
-    releaseDate:
+    screenwriters: writersAndactors,
+    cast: writersAndactors,
+    releaseDate: `${resultDay} ${generateMonth()} ${resultYear}`,
     duration: `${resultHour}h ${resultMinute}m`,
     country: generateCountry(),
     genre: generateMovieGenre(),
     description: generateMovieDescription(),
-    ageRating: generateAgeRating();
+    ageRating: generateAgeRating(),
   };
 };
 // функция генерации возрастного рейтинга
@@ -55,4 +55,28 @@ const generateDirector = () => {
   ];
   const randomIndexDirector = getRandomInteger(0, directors.length - 1);
   return directors[randomIndexDirector]; 
+};
+// функция генерации сценаристов
+const generateScreenwriters = () => {
+  const screenwriters = [
+    'Glenn Ficarra',
+    'John Requa',
+    'Quentin Jerome Tarantino',
+    'Vaughn Stein',
+    'Josie Rourke',
+    'David Ayer'
+  ];
+  const randomIndexScreenwriters = getRandomInteger(0, screenwriters.length - 1);
+  return screenwriters[randomIndexScreenwriters]; 
+};
+const randomArr = getRandomInteger(1,7);
+const writersAndactors = new Array(randomArr).fill().map(generateScreenwriters);
+// функция генерации месяцев
+const generateMonth = () => {
+  const months = ["January","February","March",
+    "April","May","June",
+    "July","August","September",
+    "October","November","December"];
+  const randomIndexMonth = getRandomInteger(0, months.length - 1);
+  return months[randomIndexMonth]; 
 };

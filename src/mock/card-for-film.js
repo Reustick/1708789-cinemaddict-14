@@ -1,4 +1,5 @@
-import { getRandomInteger, getRandomInRange } from "./util.js";
+import { getRandomInteger, getRandomInRange } from "../util.js";
+import { quantityComments } from "./movie-comment.js";
 // функция генерации названий фильма
 export const generateMovieTitle = () => {
   const movieTitle = [
@@ -16,23 +17,16 @@ export const generateMovieTitle = () => {
 // функция генерации постера фильма
 export const generateMoviePoster = () => {
   const moviePosters = [
-    'public\images\posters\made-for-each-other.png',
-    'public\images\posters\popeye-meets-sinbad.png',
-    'public\images\posters\sagebrush-trail.jpg',
-    'public\images\posters\santa-claus-conquers-the-martians.jpg',
-    'public\images\posters\the-dance-of-life.jpg',
-    'public\images\posters\the-great-flamarion.jpg',
-    'public\images\posters\the-man-with-the-golden-arm.jpg'
+    'https://upload.wikimedia.org/wikipedia/ru/thumb/7/72/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%92%D0%BE%D0%BB%D0%BA_%D1%81_%D0%A3%D0%BE%D0%BB%D0%BB-%D1%81%D1%82%D1%80%D0%B8%D1%82%C2%BB.jpg/211px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%92%D0%BE%D0%BB%D0%BA_%D1%81_%D0%A3%D0%BE%D0%BB%D0%BB-%D1%81%D1%82%D1%80%D0%B8%D1%82%C2%BB.jpg',
+    'https://upload.wikimedia.org/wikipedia/ru/thumb/3/3a/Focus_poster.jpg/205px-Focus_poster.jpg',
+    'https://upload.wikimedia.org/wikipedia/ru/thumb/2/2f/Mary_Queen_of_Scots.jpg/203px-Mary_Queen_of_Scots.jpg',
+    'https://upload.wikimedia.org/wikipedia/ru/thumb/4/4d/Suicide_Squad.jpeg/199px-Suicide_Squad.jpeg',
+    'https://upload.wikimedia.org/wikipedia/ru/thumb/f/f1/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9A%D0%BE%D0%BD%D1%87%D0%B5%D0%BD%D0%B0%D1%8F%C2%BB.jpg/211px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9A%D0%BE%D0%BD%D1%87%D0%B5%D0%BD%D0%B0%D1%8F%C2%BB.jpg',
+    'https://upload.wikimedia.org/wikipedia/ru/thumb/e/ef/Once_Upon_a_Time_in_Hollywood_cover.png/250px-Once_Upon_a_Time_in_Hollywood_cover.png',
+    'https://upload.wikimedia.org/wikipedia/ru/thumb/f/f3/Bombshell_poster.jpg/220px-Bombshell_poster.jpg'
   ];
-  let pics = [];
-  for(let i = 0; i < moviePosters.length; i++) {
-    let pic = new Image();
-    pic.src = moviePosters[i];
-    pics[i] = pic;
-  };
   const randomIndexPoster = getRandomInteger(0, moviePosters.length - 1);
-  return pics[randomIndexPoster];
-
+  return moviePosters[randomIndexPoster];
 };
 // фнкция генерации описания фильма
 export const generateMovieDescription = () => {
@@ -63,17 +57,17 @@ export const resultMinute = getRandomInteger(minute - randomMinute, minute);
 
 const randomYear = getRandomInteger(2000,2021);
 const year = new Date().getFullYear();
-const resultYear = getRandomInteger(year - randomYear, year);
+export const resultYear = getRandomInteger(year - randomYear, year);
 
 const randomMonth = getRandomInteger(0,11);
 const month = new Date().getMonth();
-const resultMonth = getRandomInteger(month - randomMonth, month);
+export const resultMonth = getRandomInteger(month - randomMonth, month);
 
 const randomDay = getRandomInteger(1,31);
 const day = new Date().getDay();
-const resultDay = getRandomInteger(day - randomday, day);
+export const resultDay = getRandomInteger(day - randomDay, day);
 // функция генерации жанра 
-const generateMovieGenre = () => {
+export const generateMovieGenre = () => {
   const movieGenre = [
     'Tragicomedy',
     'Comedy',
@@ -87,7 +81,7 @@ const generateMovieGenre = () => {
   return movieGenre[randomIndexGenre]; 
 };
 // функция генерации карточки фильма
-const generateFilmCards = () => {
+export const generateFilmCards = () => {
   return {
     poster: generateMoviePoster(),
     title: generateMovieTitle(),
@@ -96,45 +90,6 @@ const generateFilmCards = () => {
     duration:`${resultHour}h ${resultMinute}m`,
     genre: generateMovieGenre(),
     description: generateMovieDescription(),
-    numberOfComments: quantityComments()
+    numberOfComments: getRandomInteger(1,5),
   };
-};
-// функция генерации комментария
-const generateComments = () => {
-  return {
-    text: generateMovieDescription(),
-    emoji: generateEmoticons(),
-    author: generateAuthor(),
-    dateComment:`${resultYear}/${resultMonth}/${resultDay} ${resultHour}:${resultMinute}`
-  }
-};
-const quantityComments = () =>{
-  for (let i = 0; i <= getRandomInteger(1,10); i++) {
-    return generateComments();
-  };
-};
-// функция генерации смайлика
-const generateEmoticons = () => {
-  const emoticons = {
-    angryFace: '&#x1F620',
-    pukeFace: '&#129326',
-    sleepingFace: '&#x1F634',
-    smileFace: '&#x1F600',
-  };
-  const arrayEmoticons = Array.from(emoticons);
-  const randomIndexEmoticons = getRandomInteger(0, arrayEmoticons.length - 1);
-  return emoticons[randomIndexEmoticons]; 
-};
-// функция генерации автора комментария
-const generateAuthor = () => {
-  const author = [
-    'Sasha',
-    'Pasha',
-    'Masha',
-    'Ksusha',
-    'Petya',
-    'Vasya'
-  ];
-  const randomIndexAuthor = getRandomInteger(0, author.length - 1);
-  return author[randomIndexAuthor]; 
 };
