@@ -6,7 +6,6 @@ import { createPopUp } from './view/popup.js';
 import { createFooterStatistic } from './view/footer.js';
 import { generateFilmCards } from './mock/card-for-film.js';
 
-const CARDS_MAX_COUNT = 5;
 const CARDS_MIN_COUNT = 2;
 const FILMS_COUNT = 15;
 const FILM_COUNT_PER_STEP = 5;
