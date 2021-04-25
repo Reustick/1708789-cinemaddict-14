@@ -1,4 +1,4 @@
-export const createSiteMenuTemplate = () => {
+export const createSiteMenuTemplate = (filters) => {
   return `
   <nav class="main-navigation">
     <div class="main-navigation__items">
@@ -9,10 +9,16 @@ export const createSiteMenuTemplate = () => {
     </div>
     <a href="#stats" class="main-navigation__additional">Stats</a>
   </nav>
-  <ul class="sort">
-  <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
-  <li><a href="#" class="sort__button">Sort by date</a></li>
-  <li><a href="#" class="sort__button">Sort by rating</a></li>
+  <ul class="sort">${
+    filters.map((filter,idx)=>{
+      return `<li><a href="#" class="sort__button ${idx == 0 ? 'sort__button--active' : ''}">${filter.title}</a></li>`;
+    }).join('')
+  }
+  
   </ul>
   </section>`;
 };
+
+{/* <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
+  <li><a href="#" class="sort__button">Sort by date</a></li>
+  <li><a href="#" class="sort__button">Sort by rating</a></li> */}
