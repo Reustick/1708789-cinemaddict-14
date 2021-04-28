@@ -14,3 +14,34 @@ export const formatDate = (date) => {
   'October','November','December'];
   return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
 };
+//_____________________________________
+export const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};
+
+export const renderElement = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
+};
+
+export const renderTemplate = (container, template, place) => {
+  container.insertAdjacentHTML(place, template);
+};
+
+// Принцип работы прост:
+// 1. создаём пустой div-блок
+// 2. берём HTML в виде строки и вкладываем в этот div-блок, превращая в DOM-элемент
+// 3. возвращаем этот DOM-элемент
+export const createElement = (template) => {
+  const newElement = document.createElement('div'); // 1
+  newElement.innerHTML = template.trim(); // 2
+
+  return newElement.firstChild; // 3
+};

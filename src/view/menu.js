@@ -1,4 +1,5 @@
-export const createSiteMenuTemplate = (filters) => {
+import {createElement} from '../util.js';
+const createSiteMenuTemplate = (filters) => {
   return `
   <nav class="main-navigation">
     <div class="main-navigation__items">
@@ -11,13 +12,32 @@ export const createSiteMenuTemplate = (filters) => {
   </nav>
   <ul class="sort">${
     filters.map((filter,idx)=>{
-      return `<li><a href="#" class="sort__button ${idx == 0 ? 'sort__button--active' : ''}">${filter.title}</a></li>`;
+      return `<li><a href="#" class="sort__button ${idx == 0 ? 'sort__button--active' : ''}">${filter.title}</a></li>`; // не выводит
     }).join('')
   }
   
   </ul>
   </section>`;
 };
+
+export default class SiteMenu {
+  constructor(filters) {
+    this._filters = filters;
+    this._element = null;
+  }
+  getTemplate() {
+    return createSiteMenuTemplate(this._filters);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}
 
 {/* <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
   <li><a href="#" class="sort__button">Sort by date</a></li>
