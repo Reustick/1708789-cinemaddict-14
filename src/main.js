@@ -81,6 +81,12 @@ if (films.length > FILM_COUNT_PER_STEP) {
     }
   });
 }
+// const filmComponent = document.querySelectorAll('.film-card');
+
+
+
+
+
 
 renderElement(siteMainElement, new FilmPopupView(films[0]).getElement(), RenderPosition.BEFOREEND);   // done
 renderElement(siteFooterElement, new FooterStatisticView().getElement(), RenderPosition.BEFOREEND);   // done

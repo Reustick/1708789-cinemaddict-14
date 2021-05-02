@@ -1,4 +1,5 @@
-import { formatDate, createElement } from '../util.js';
+import AbstractView from './abstract.js';
+import { formatDate } from '../util.js';
 const createPopUp = (film) => {
   const {poster, title, originalTitle, rating, director, screenwriters, cast, releaseDate, duration, country, genre, description, ageRating} = film;
   return `
@@ -70,25 +71,12 @@ const createPopUp = (film) => {
 </div>
   ` ;
 };
-export default class FilmPopup {
+export default class FilmPopup extends AbstractView {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
   }
-
   getTemplate() {
     return createPopUp(this._film);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
