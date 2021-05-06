@@ -7,6 +7,9 @@ const createUser = () => {
   </section>` ;
 };
 export default class User extends AbstractView {
+  constructor() {
+    super();
+  }
   getTemplate() {
     return createUser();
   }

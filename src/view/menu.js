@@ -1,5 +1,5 @@
 import AbstractView from './abstract.js';
-const createSiteMenuTemplate = (filters) => {
+const createSiteMenuTemplate = () => {
   return `
   <nav class="main-navigation">
     <div class="main-navigation__items">
@@ -9,26 +9,13 @@ const createSiteMenuTemplate = (filters) => {
       <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">0</span></a>
     </div>
     <a href="#stats" class="main-navigation__additional">Stats</a>
-  </nav>
-  <ul class="sort">${
-    filters.map((filter,idx)=>{
-      return `<li><a href="#" class="sort__button ${idx == 0 ? 'sort__button--active' : ''}">${filter.title}</a></li>`; // не выводит
-    }).join('')
-  }
-  </ul>
-  `;
+  </nav>`;
 };
-
 export default class SiteMenu extends AbstractView {
-  constructor(filters) {
+  constructor() {
     super();
-    this._filters = filters;
-  }
+  };
   getTemplate() {
-    return createSiteMenuTemplate(this._filters);
-  }
-}
-
-{/* <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
-  <li><a href="#" class="sort__button">Sort by date</a></li>
-  <li><a href="#" class="sort__button">Sort by rating</a></li> */}
+    return createSiteMenuTemplate();
+  };
+};

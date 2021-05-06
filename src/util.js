@@ -45,3 +45,29 @@ export const createElement = (template) => {
 
   return newElement.firstChild; // 3
 };
+// _________________________________________
+
+export const createClosePopup = (evt, body, popup, btnClose) =>{
+  const closePopup = () => {
+    evt.preventDefault();
+    popup.remove();
+    body.classList.remove('hide-overflow');
+    btnClose.removeEventListener('click', onPopupCloseClick);
+
+  };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      closePopup();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+  
+  const onPopupCloseClick = () => {
+    closePopup();
+  };
+
+  document.addEventListener('keydown', onEscKeyDown);
+  btnClose.addEventListener('click', onPopupCloseClick);
+};

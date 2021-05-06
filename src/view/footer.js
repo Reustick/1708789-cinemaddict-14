@@ -5,6 +5,9 @@ const createFooterStatistic = () => {
   <p>${getRandomInteger(1000,200000)} movies inside</p>`;
 };
 export default class FooterStatistic extends AbstractView {
+  constructor() {
+    super();
+  }
   getTemplate() {
     return createFooterStatistic();
   }

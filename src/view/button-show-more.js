@@ -5,6 +5,9 @@ const createShowMoreButton = () => {
 };
 
 export default class LoadMoreButton extends AbstractView {
+  constructor() {
+    super();
+  }
   getTemplate() {
     return createShowMoreButton();
   }
