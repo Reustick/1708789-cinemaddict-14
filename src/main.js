@@ -6,6 +6,7 @@ import FilmCardView  from './view/film-card.js';
 import LoadMoreButtonView from './view/button-show-more.js';
 import FilmPopupView from './view/popup.js';
 import FooterStatisticView from './view/footer.js';
+import NoTaskView from './view/no-film.js';
 import { generateFilmCards } from './mock/card-for-film.js';
 import { render, RenderPosition, createClosePopup } from './util.js';
 import { CARDS_MIN_COUNT, FILMS_COUNT, FILM_COUNT_PER_STEP, FILTERS } from './const.js';
@@ -20,6 +21,13 @@ render(siteUserElement, new UserView().getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND); 
 render(siteMainElement, new SortView(FILTERS).getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new FilmWrapView().getElement(), RenderPosition.BEFOREEND);
+/*
+Что за ???
+*/ 
+// if (films.every((film) => task.isArchive)) {
+//   render(siteMainElement, new NoTaskView().getElement(), RenderPosition.BEFOREEND);
+// } else {
+//   render(siteMainElement, new SortView(FILTERS).getElement(), RenderPosition.BEFOREEND);
 
 const renderFilm = (filmListElement, film) => {
   const filmComponent = new FilmCardView(film);
@@ -31,27 +39,33 @@ const filmCardContainer = document.querySelector('.films-list__all');
 const filmCardContainerTop = document.querySelector('.films-list__top');
 const filmCardContainerMost = document.querySelector('.films-list__most');
 
-// const filmView = new FilmCardView();
-
-//const renderFilms = (container, film, RenderPosition) => {
-  for (let i = 0; i < Math.min(films.length, FILM_COUNT_PER_STEP); i++) {
-    
-    // const filmComponentForPopup = filmView.getElement().querySelectorAll('.film-card__poster, .film-card__title, .film-card__comments');
-    // for (let clickElement of filmComponentForPopup) {
-    //   clickElement.addEventListener('click', () =>{
-    //     render(siteMainElement, new FilmPopupView(films[i]).getElement(), RenderPosition.BEFOREEND);
-    //   })
-    // };
-    renderFilm(filmCardContainer, films[i]);
-  };
-//};
-
 // const popupElement = new FilmPopupView(films[0]).getElement();
-// const popupCloseElement = popupElement.querySelector('.film-details__close-btn');
-// popupCloseElement.addEventListener('click', () => {
-//   console.log('sdfds');
-// })
-//createClosePopup(bodyElement, popupElement, popupCloseElement);
+
+// const renderFilms = (film) => {
+  for (let i = 0; i < Math.min(films.length, FILM_COUNT_PER_STEP); i++) {
+    const popupElement = new FilmPopupView(films[i]).getElement();
+    const filmView = new FilmCardView(films[i]);
+    const filmComponentForPopup = filmView.getElement().querySelectorAll('.film-card__poster, .film-card__title, .film-card__comments');
+    for (let clickElement of filmComponentForPopup) {
+      clickElement.addEventListener('click', (evt) =>{
+        evt.preventDefault();                              // когда нужно прописывать это???
+        siteMainElement.appendChild(popupElement);
+        // bodyElement.classList.add('hide-overflow'); зачем? все и так работает
+      })
+    };
+    render(filmCardContainer, filmView.getElement(), RenderPosition.BEFOREEND);
+
+    // const closePopup = () => {
+    const popupCloseElement = popupElement.querySelector('.film-details__close-btn');
+    popupCloseElement.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      siteMainElement.removeChild(popupElement);
+      // bodyElement.classList.remove('hide-overflow');  зачем? все и так работает
+   });
+  // };
+  };
+// };
+
 
 for (let i = 0; i < CARDS_MIN_COUNT; i++) {
   render(filmCardContainerTop, new FilmCardView(films[i]).getElement(), RenderPosition.BEFOREEND);
@@ -68,6 +82,7 @@ if (films.length > FILM_COUNT_PER_STEP) {
     evt.preventDefault();
     films
       .slice(renderedFilmsCount, renderedFilmsCount + FILM_COUNT_PER_STEP)
+      // .forEach((film) => renderFilms(film));
       .forEach((film) => render(filmCardContainer, new FilmCardView(film).getElement(), RenderPosition.BEFOREEND));  // вызваем функцию
     renderedFilmsCount += FILM_COUNT_PER_STEP;
     if (renderedFilmsCount >= films.length) {
