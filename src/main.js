@@ -8,10 +8,12 @@ import FilmPopupView from './view/popup.js';
 import FooterStatisticView from './view/footer.js';
 import NoTaskView from './view/no-film.js';
 import { generateFilmCards } from './mock/card-for-film.js';
-import { render, RenderPosition, createClosePopup } from './util.js';
+import { generateComments } from './mock/movie-comment.js';
+import { render, RenderPosition } from './util.js';
 import { CARDS_MIN_COUNT, FILMS_COUNT, FILM_COUNT_PER_STEP, FILTERS } from './const.js';
 
 const films = new Array(FILMS_COUNT).fill().map(generateFilmCards);
+const comments = new Array(5).fill().map(generateComments);
 const bodyElement = document.querySelector('body');
 const siteUserElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
@@ -21,76 +23,68 @@ render(siteUserElement, new UserView().getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND); 
 render(siteMainElement, new SortView(FILTERS).getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new FilmWrapView().getElement(), RenderPosition.BEFOREEND);
-/*
-Что за ???
-*/ 
-// if (films.every((film) => task.isArchive)) {
-//   render(siteMainElement, new NoTaskView().getElement(), RenderPosition.BEFOREEND);
-// } else {
-//   render(siteMainElement, new SortView(FILTERS).getElement(), RenderPosition.BEFOREEND);
 
 const renderFilm = (filmListElement, film) => {
   const filmComponent = new FilmCardView(film);
-  const filmWrapComponent = new FilmWrapView(film);
+  const popupElement = new FilmPopupView(film, comments[0]).getElement(); // КАК ИЗБАВИТЬСЯ ОТ ИНДЕКСА???
+  const filmComponentForPopup = filmComponent.getElement().querySelectorAll('.film-card__poster, .film-card__title, .film-card__comments');
+  
+  // ТО ЧТО ЗАКОММЕНТИРОВАНО ЭТО ДЛЯ СЛЕДУЮЩЕГО ЗАДАНИЯ
+  // const onEscKeyDown = (evt) => {
+  //   if (evt.key === 'Escape' || evt.key === 'Esc') {
+  //     evt.preventDefault();
+  //     closePopup();
+  //     document.removeEventListener('keydown', onEscKeyDown);
+  //   }
+  // };
+
+  for (let clickElement of filmComponentForPopup) {
+    clickElement.addEventListener('click', (evt) =>{
+      evt.preventDefault(); 
+      siteMainElement.appendChild(popupElement);
+      // document.addEventListener('keydown', onEscKeyDown);
+      bodyElement.classList.add('hide-overflow');
+    });
+  };
+  // const closePopup = () => {
+    const popupCloseElement = popupElement.querySelector('.film-details__close-btn');
+    popupCloseElement.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      siteMainElement.removeChild(popupElement);
+      // document.removeEventListener('keydown', onEscKeyDown);
+      bodyElement.classList.remove('hide-overflow'); 
+    });
+  // };
   render(filmListElement, filmComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
 const filmCardContainer = document.querySelector('.films-list__all');
 const filmCardContainerTop = document.querySelector('.films-list__top');
 const filmCardContainerMost = document.querySelector('.films-list__most');
+const containerForButtonShowMore = document.querySelector('.films-list');
 
-// const popupElement = new FilmPopupView(films[0]).getElement();
-
-// const renderFilms = (film) => {
-  for (let i = 0; i < Math.min(films.length, FILM_COUNT_PER_STEP); i++) {
-    const popupElement = new FilmPopupView(films[i]).getElement();
-    const filmView = new FilmCardView(films[i]);
-    const filmComponentForPopup = filmView.getElement().querySelectorAll('.film-card__poster, .film-card__title, .film-card__comments');
-    for (let clickElement of filmComponentForPopup) {
-      clickElement.addEventListener('click', (evt) =>{
-        evt.preventDefault();                              // когда нужно прописывать это???
-        siteMainElement.appendChild(popupElement);
-        // bodyElement.classList.add('hide-overflow'); зачем? все и так работает
-      })
-    };
-    render(filmCardContainer, filmView.getElement(), RenderPosition.BEFOREEND);
-
-    // const closePopup = () => {
-    const popupCloseElement = popupElement.querySelector('.film-details__close-btn');
-    popupCloseElement.addEventListener('click', (evt) => {
-      evt.preventDefault();
-      siteMainElement.removeChild(popupElement);
-      // bodyElement.classList.remove('hide-overflow');  зачем? все и так работает
-   });
-  // };
-  };
-// };
-
-
-for (let i = 0; i < CARDS_MIN_COUNT; i++) {
-  render(filmCardContainerTop, new FilmCardView(films[i]).getElement(), RenderPosition.BEFOREEND);
-  render(filmCardContainerMost, new FilmCardView(films[i]).getElement(), RenderPosition.BEFOREEND);
-}
+for (let i = 0; i < Math.min(films.length, FILM_COUNT_PER_STEP); i++) {
+  renderFilm(filmCardContainer, films[i]);
+};
 
 if (films.length > FILM_COUNT_PER_STEP) {
   let renderedFilmsCount = FILM_COUNT_PER_STEP;
-  const loadMoreButtonComponent = new LoadMoreButtonView();
-  render(siteMainElement, loadMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
-
-  const loadMoreButton = document.querySelector('.films-list__show-more');
-  loadMoreButton.addEventListener('click', (evt) => {
+  const loadMoreButtonComponent = new LoadMoreButtonView().getElement();
+  render(containerForButtonShowMore, loadMoreButtonComponent, RenderPosition.BEFOREEND);
+  loadMoreButtonComponent.addEventListener('click', (evt) => {
     evt.preventDefault();
     films
       .slice(renderedFilmsCount, renderedFilmsCount + FILM_COUNT_PER_STEP)
-      // .forEach((film) => renderFilms(film));
-      .forEach((film) => render(filmCardContainer, new FilmCardView(film).getElement(), RenderPosition.BEFOREEND));  // вызваем функцию
+      .forEach((film) => renderFilm(filmCardContainer, film));
     renderedFilmsCount += FILM_COUNT_PER_STEP;
     if (renderedFilmsCount >= films.length) {
-      loadMoreButtonComponent.getElement().remove();
-      loadMoreButtonComponent.removeElement();
-    }
+      loadMoreButtonComponent.remove();
+    };
   });
-}
+};
 
-// renderElement(siteMainElement, new FilmPopupView(films[0]).getElement(), RenderPosition.BEFOREEND);   // done
-render(siteFooterElement, new FooterStatisticView().getElement(), RenderPosition.BEFOREEND);   // done
+for (let i = 0; i < CARDS_MIN_COUNT; i++) {
+  renderFilm(filmCardContainerTop, films[i]);
+  renderFilm(filmCardContainerMost, films[i]);
+};
+render(siteFooterElement, new FooterStatisticView().getElement(), RenderPosition.BEFOREEND);

@@ -1,7 +1,7 @@
 import { getRandomInteger } from '../util.js';
 import { generateMovieDescription, resultHour, resultMinute, resultDay, resultYear, resultMonth } from './card-for-film.js';
 // функция генерации комментария
-const generateComments = () => {
+export const generateComments = () => {
   return {
     text: generateMovieDescription(),
     emoji: generateEmoticons(),
@@ -14,14 +14,13 @@ export const quantityComments = () =>{
 };
 // функция генерации смайлика
 const generateEmoticons = () => {
-  const emoticons = {
-    angryFace: '&#x1F620',
-    pukeFace: '&#129326',
-    sleepingFace: '&#x1F634',
-    smileFace: '&#x1F600',
-  };
-  const arrayEmoticons = Array.from(emoticons);
-  const randomIndexEmoticons = getRandomInteger(0, arrayEmoticons.length - 1);
+  const emoticons = [
+    './images/emoji/angry.png',
+    './images/emoji/puke.png',
+    './images/emoji/sleeping.png',
+    './images/emoji/smile.png',
+  ];
+  const randomIndexEmoticons = getRandomInteger(0, emoticons.length - 1);
   return emoticons[randomIndexEmoticons]; 
 };
 // функция генерации автора комментария

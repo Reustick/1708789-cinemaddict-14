@@ -41,11 +41,3 @@ export const createElement = (template) => {
 
   return newElement.firstChild; // 3
 };
-// _________________________________________
-  const onEscKeyDown = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      evt.preventDefault();
-      closePopup();
-      document.removeEventListener('keydown', onEscKeyDown);
-    }
-  };
