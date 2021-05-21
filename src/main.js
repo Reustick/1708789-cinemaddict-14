@@ -6,7 +6,7 @@ import FilmCardView  from './view/film-card.js';
 import LoadMoreButtonView from './view/button-show-more.js';
 import FilmPopupView from './view/popup.js';
 import FooterStatisticView from './view/footer.js';
-import NoTaskView from './view/no-film.js';
+// import NoTaskView from './view/no-film.js';
 import { generateFilmCards } from './mock/card-for-film.js';
 import { generateComments } from './mock/movie-comment.js';
 import { render, RenderPosition } from './util.js';
@@ -20,7 +20,7 @@ const siteMainElement = document.querySelector('.main');
 const siteFooterElement = document.querySelector('.footer__statistics');
 
 render(siteUserElement, new UserView().getElement(), RenderPosition.BEFOREEND);
-render(siteMainElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND); 
+render(siteMainElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new SortView(FILTERS).getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new FilmWrapView().getElement(), RenderPosition.BEFOREEND);
 
@@ -28,7 +28,6 @@ const renderFilm = (filmListElement, film) => {
   const filmComponent = new FilmCardView(film);
   const popupElement = new FilmPopupView(film, comments[0]).getElement(); // КАК ИЗБАВИТЬСЯ ОТ ИНДЕКСА??????
   const filmComponentForPopup = filmComponent.getElement().querySelectorAll('.film-card__poster, .film-card__title, .film-card__comments');
-  
   // ТО ЧТО ЗАКОММЕНТИРОВАНО ЭТО ДЛЯ СЛЕДУЮЩЕГО ЗАДАНИЯ
   // const onEscKeyDown = (evt) => {
   //   if (evt.key === 'Escape' || evt.key === 'Esc') {
@@ -38,22 +37,22 @@ const renderFilm = (filmListElement, film) => {
   //   }
   // };
 
-  for (let clickElement of filmComponentForPopup) {
+  for (const clickElement of filmComponentForPopup) {
     clickElement.addEventListener('click', (evt) =>{
-      evt.preventDefault(); 
+      evt.preventDefault();
       siteMainElement.appendChild(popupElement);
       // document.addEventListener('keydown', onEscKeyDown);
       bodyElement.classList.add('hide-overflow');
     });
-  };
+  }
   // const closePopup = () => {
-    const popupCloseElement = popupElement.querySelector('.film-details__close-btn');
-    popupCloseElement.addEventListener('click', (evt) => {
-      evt.preventDefault();
-      siteMainElement.removeChild(popupElement);
-      // document.removeEventListener('keydown', onEscKeyDown);
-      bodyElement.classList.remove('hide-overflow'); 
-    });
+  const popupCloseElement = popupElement.querySelector('.film-details__close-btn');
+  popupCloseElement.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    siteMainElement.removeChild(popupElement);
+    // document.removeEventListener('keydown', onEscKeyDown);
+    bodyElement.classList.remove('hide-overflow');
+  });
   // };
   render(filmListElement, filmComponent.getElement(), RenderPosition.BEFOREEND);
 };
@@ -65,7 +64,7 @@ const containerForButtonShowMore = document.querySelector('.films-list');
 
 for (let i = 0; i < Math.min(films.length, FILM_COUNT_PER_STEP); i++) {
   renderFilm(filmCardContainer, films[i]);
-};
+}
 
 if (films.length > FILM_COUNT_PER_STEP) {
   let renderedFilmsCount = FILM_COUNT_PER_STEP;
@@ -79,12 +78,12 @@ if (films.length > FILM_COUNT_PER_STEP) {
     renderedFilmsCount += FILM_COUNT_PER_STEP;
     if (renderedFilmsCount >= films.length) {
       loadMoreButtonComponent.remove();
-    };
+    }
   });
-};
+}
 
 for (let i = 0; i < CARDS_MIN_COUNT; i++) {
   renderFilm(filmCardContainerTop, films[i]);
   renderFilm(filmCardContainerMost, films[i]);
-};
+}
 render(siteFooterElement, new FooterStatisticView().getElement(), RenderPosition.BEFOREEND);

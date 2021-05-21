@@ -9,10 +9,10 @@ export const getRandomInRange = (min, max,simbolsAfterComma) => {
 };
 export const formatDate = (date) => {
   const months = ['January','February','March',
-  'April','May','June',
-  'July','August','September',
-  'October','November','December'];
-  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
+    'April','May','June',
+    'July','August','September',
+    'October','November','December'];
+  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
 };
 //_____________________________________
 export const RenderPosition = {

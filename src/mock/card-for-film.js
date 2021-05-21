@@ -1,5 +1,5 @@
-import { getRandomInteger, getRandomInRange } from "../util.js";
-import { quantityComments } from "./movie-comment.js";
+import { getRandomInteger, getRandomInRange } from '../util.js';
+import { quantityComments } from './movie-comment.js';
 // функция генерации названий фильма
 export const generateMovieTitle = () => {
   const movieTitle = [
@@ -9,10 +9,10 @@ export const generateMovieTitle = () => {
     'Terminal',
     'Once Upon a Time In Hollywood',
     'Bombshell',
-    'Mary Queen of Scots'
+    'Mary Queen of Scots',
   ];
   const randomIndexTitle = getRandomInteger(0, movieTitle.length - 1);
-  return movieTitle[randomIndexTitle]; 
+  return movieTitle[randomIndexTitle];
 };
 // функция генерации постера фильма
 export const generateMoviePoster = () => {
@@ -23,7 +23,7 @@ export const generateMoviePoster = () => {
     'https://upload.wikimedia.org/wikipedia/ru/thumb/4/4d/Suicide_Squad.jpeg/199px-Suicide_Squad.jpeg',
     'https://upload.wikimedia.org/wikipedia/ru/thumb/f/f1/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9A%D0%BE%D0%BD%D1%87%D0%B5%D0%BD%D0%B0%D1%8F%C2%BB.jpg/211px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9A%D0%BE%D0%BD%D1%87%D0%B5%D0%BD%D0%B0%D1%8F%C2%BB.jpg',
     'https://upload.wikimedia.org/wikipedia/ru/thumb/e/ef/Once_Upon_a_Time_in_Hollywood_cover.png/250px-Once_Upon_a_Time_in_Hollywood_cover.png',
-    'https://upload.wikimedia.org/wikipedia/ru/thumb/f/f3/Bombshell_poster.jpg/220px-Bombshell_poster.jpg'
+    'https://upload.wikimedia.org/wikipedia/ru/thumb/f/f3/Bombshell_poster.jpg/220px-Bombshell_poster.jpg',
   ];
   const randomIndexPoster = getRandomInteger(0, moviePosters.length - 1);
   return moviePosters[randomIndexPoster];
@@ -41,7 +41,7 @@ export const generateMovieDescription = () => {
     'Sed sed nisi sed augue convallis suscipit in sed felis.',
     'Aliquam erat volutpat.',
     'Nunc fermentum tortor ac porta dapibus.',
-    'In rutrum ac purus sit amet tempus.'
+    'In rutrum ac purus sit amet tempus.',
   ];
   const randomIndexDescription = getRandomInteger(1, 5);
   return descriptionsMovie[randomIndexDescription];
@@ -66,7 +66,7 @@ export const resultMonth = getRandomInteger(month - randomMonth, month);
 const randomDay = getRandomInteger(1,31);
 const day = new Date().getDay();
 export const resultDay = getRandomInteger(day - randomDay, day);
-// функция генерации жанра 
+// функция генерации жанра
 export const generateMovieGenre = () => {
   const movieGenre = [
     'Tragicomedy',
@@ -75,18 +75,18 @@ export const generateMovieGenre = () => {
     'Neo-noir',
     'Drama',
     'Autobiography',
-    'Thriller'
+    'Thriller',
   ];
   const randomIndexGenre = getRandomInteger(0, movieGenre.length - 1);
-  return movieGenre[randomIndexGenre]; 
+  return movieGenre[randomIndexGenre];
 };
 // функция генерации рандомного времени
 const getRandomDate = () => {
-  const gap = getRandomInteger(0, 365*10); 
+  const gap = getRandomInteger(0, 365*10);
   const date = new Date();
   date.setDate(date.getDate() - gap);
   return date;
-}
+};
 // функция генерации карточки фильма_________________________________
 export const generateFilmCards = () => {
   return {
@@ -115,10 +115,10 @@ const generateAgeRating = () => {
     '6+',
     '12+',
     '16+',
-    '18+'
+    '18+',
   ];
   const randomIndexAgeRating = getRandomInteger(0, movieAgeRating.length - 1);
-  return movieAgeRating[randomIndexAgeRating]; 
+  return movieAgeRating[randomIndexAgeRating];
 };
 // функция генерации страны
 const generateCountry = () => {
@@ -128,10 +128,10 @@ const generateCountry = () => {
     'New Zealand',
     'Australia',
     'Canada',
-    'United Kingdom'
+    'United Kingdom',
   ];
   const randomIndexCountry = getRandomInteger(0, countrys.length - 1);
-  return countrys[randomIndexCountry]; 
+  return countrys[randomIndexCountry];
 };
 // функция генерации режисера
 const generateDirector = () => {
@@ -141,10 +141,10 @@ const generateDirector = () => {
     'Quentin Jerome Tarantino',
     'Vaughn Stein',
     'Josie Rourke',
-    'David Ayer'
+    'David Ayer',
   ];
   const randomIndexDirector = getRandomInteger(0, directors.length - 1);
-  return directors[randomIndexDirector]; 
+  return directors[randomIndexDirector];
 };
 // функция генерации сценаристов
 const generateScreenwriters = () => {
@@ -154,9 +154,9 @@ const generateScreenwriters = () => {
     'Quentin Jerome Tarantino',
     'Vaughn Stein',
     'Josie Rourke',
-    'David Ayer'
+    'David Ayer',
   ];
   const randomIndexScreenwriters = getRandomInteger(0, screenwriters.length - 1);
-  return screenwriters[randomIndexScreenwriters]; 
+  return screenwriters[randomIndexScreenwriters];
 };
 const writersAndactors = new Array(getRandomInteger(1,7)).fill().map(generateScreenwriters);

@@ -178,8 +178,8 @@ export default class FilmPopup extends AbstractView {
     super();
     this._film = film;
     this._comment = comment;
-  };
+  }
   getTemplate() {
     return createPopUp(this._film, this._comment);
-  };
-};
+  }
+}

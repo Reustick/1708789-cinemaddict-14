@@ -14,8 +14,8 @@ const createSiteMenuTemplate = () => {
 export default class SiteMenu extends AbstractView {
   constructor() {
     super();
-  };
+  }
   getTemplate() {
     return createSiteMenuTemplate();
-  };
-};
+  }
+}

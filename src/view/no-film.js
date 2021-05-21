@@ -10,8 +10,8 @@ const createNoFilmTemplate = () => {
 export default class NoFilm extends AbstractView {
   constructor() {
     super();
-  };
+  }
   getTemplate() {
     return createNoFilmTemplate();
-  };
-};
+  }
+}
