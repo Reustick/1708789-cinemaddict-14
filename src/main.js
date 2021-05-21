@@ -26,7 +26,7 @@ render(siteMainElement, new FilmWrapView().getElement(), RenderPosition.BEFOREEN
 
 const renderFilm = (filmListElement, film) => {
   const filmComponent = new FilmCardView(film);
-  const popupElement = new FilmPopupView(film, comments[0]).getElement(); // КАК ИЗБАВИТЬСЯ ОТ ИНДЕКСА???
+  const popupElement = new FilmPopupView(film, comments[0]).getElement(); // КАК ИЗБАВИТЬСЯ ОТ ИНДЕКСА??????
   const filmComponentForPopup = filmComponent.getElement().querySelectorAll('.film-card__poster, .film-card__title, .film-card__comments');
   
   // ТО ЧТО ЗАКОММЕНТИРОВАНО ЭТО ДЛЯ СЛЕДУЮЩЕГО ЗАДАНИЯ
