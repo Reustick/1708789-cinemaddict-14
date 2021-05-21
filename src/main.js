@@ -6,7 +6,7 @@ import FilmCardView  from './view/film-card.js';
 import LoadMoreButtonView from './view/button-show-more.js';
 import FilmPopupView from './view/popup.js';
 import FooterStatisticView from './view/footer.js';
-// import NoTaskView from './view/no-film.js';
+import NoFilmView from './view/no-film.js';
 import { generateFilmCards } from './mock/card-for-film.js';
 import { generateComments } from './mock/movie-comment.js';
 import { render, RenderPosition } from './util.js';
@@ -22,38 +22,44 @@ const siteFooterElement = document.querySelector('.footer__statistics');
 render(siteUserElement, new UserView().getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new SortView(FILTERS).getElement(), RenderPosition.BEFOREEND);
-render(siteMainElement, new FilmWrapView().getElement(), RenderPosition.BEFOREEND);
+
+films.length === 0 ?
+  render(siteMainElement, new NoFilmView().getElement(), RenderPosition.BEFOREEND) :
+  render(siteMainElement, new FilmWrapView().getElement(), RenderPosition.BEFOREEND);
 
 const renderFilm = (filmListElement, film) => {
   const filmComponent = new FilmCardView(film);
   const popupElement = new FilmPopupView(film, comments[0]).getElement(); // КАК ИЗБАВИТЬСЯ ОТ ИНДЕКСА??????
   const filmComponentForPopup = filmComponent.getElement().querySelectorAll('.film-card__poster, .film-card__title, .film-card__comments');
-  // ТО ЧТО ЗАКОММЕНТИРОВАНО ЭТО ДЛЯ СЛЕДУЮЩЕГО ЗАДАНИЯ
-  // const onEscKeyDown = (evt) => {
-  //   if (evt.key === 'Escape' || evt.key === 'Esc') {
-  //     evt.preventDefault();
-  //     closePopup();
-  //     document.removeEventListener('keydown', onEscKeyDown);
-  //   }
-  // };
 
   for (const clickElement of filmComponentForPopup) {
     clickElement.addEventListener('click', (evt) =>{
       evt.preventDefault();
       siteMainElement.appendChild(popupElement);
-      // document.addEventListener('keydown', onEscKeyDown);
+      document.addEventListener('keydown', onEscKeyDown);
       bodyElement.classList.add('hide-overflow');
     });
   }
-  // const closePopup = () => {
+
+  const closePopup = () => {
+    siteMainElement.removeChild(popupElement);
+    document.removeEventListener('keydown', onEscKeyDown);
+    bodyElement.classList.remove('hide-overflow');
+  };
+
   const popupCloseElement = popupElement.querySelector('.film-details__close-btn');
   popupCloseElement.addEventListener('click', (evt) => {
     evt.preventDefault();
-    siteMainElement.removeChild(popupElement);
-    // document.removeEventListener('keydown', onEscKeyDown);
-    bodyElement.classList.remove('hide-overflow');
+    closePopup();
   });
-  // };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      closePopup();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
   render(filmListElement, filmComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
