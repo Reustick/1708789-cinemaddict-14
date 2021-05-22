@@ -1,4 +1,4 @@
-import { getRandomInteger } from '../util.js';
+import { getRandomInteger } from '../utils/common.js';
 import { generateMovieDescription, resultHour, resultMinute, resultDay, resultYear, resultMonth } from './card-for-film.js';
 // функция генерации комментария
 export const generateComments = () => {

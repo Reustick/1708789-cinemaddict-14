@@ -1,5 +1,5 @@
 import AbstractView from './abstract.js';
-import { getRandomInteger } from '../util.js';
+import { getRandomInteger } from '../utils/common.js';
 const createFooterStatistic = () => {
   return `
   <p>${getRandomInteger(1000,200000)} movies inside</p>`;
