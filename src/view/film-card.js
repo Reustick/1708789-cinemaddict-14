@@ -1,22 +1,6 @@
-export const filmListWrap = () => {
-  return `<section class="films">
-  <section class="films-list">
-    <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
-    <div class="films-list__container">
-    </div>
-  </section>
-  <section class="films-list films-list--extra">
-    <h2 class="films-list__title">Top rated</h2>
-    <div class="films-list__container"></div>
-  </section>
-  <section class="films-list films-list--extra">
-    <h2 class="films-list__title">Most commented</h2>
-    <div class="films-list__container"></div>
-  </section>
-  </section>`;
-};
-
-export const createFilmCard = ({poster,title, rating, releaseDate, duration, genre, description, comments}) => {
+import AbstractView from './abstract.js';
+const createFilmCard = (film) => {
+  const {poster,title, rating, releaseDate, duration, genre, description, comments} = film;
   return `<article class="film-card">
   <h3 class="film-card__title">${title}</h3>
   <p class="film-card__rating">${rating}</p>
@@ -35,3 +19,13 @@ export const createFilmCard = ({poster,title, rating, releaseDate, duration, gen
   </div>
 </article>`;
 };
+
+export default class FilmCard extends AbstractView {
+  constructor(film) {
+    super();
+    this._film = film;
+  }
+  getTemplate() {
+    return createFilmCard(this._film);
+  }
+}
