@@ -25,9 +25,16 @@ export default class FilmCard extends AbstractView {
     super();
     this._film = film;
     this._filmClickHandler = this._filmClickHandler.bind(this);
+    this._arrayElement = null;
   }
   getTemplate() {
     return createFilmCard(this._film);
+  }
+
+  _getArrayElement() {
+    if (!this._arrayElement) {
+      return this._arrayElement = this.getElement().querySelectorAll('.film-card__poster, .film-card__title, .film-card__comments');
+    }
   }
 
   _filmClickHandler(evt) {
@@ -37,6 +44,8 @@ export default class FilmCard extends AbstractView {
 
   setFilmClickHandler(callback) {
     this._callback.filmClick = callback;
-    this.getElement().querySelector('.film-card__poster').addEventListener('click', this._filmClickHandler);
+    for (const clickElement of this._getArrayElement()) {
+      clickElement.addEventListener('click', this._filmClickHandler);
+    }
   }
 }

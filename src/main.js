@@ -29,18 +29,12 @@ films.length === 0 ?
 
 const renderFilm = (filmListElement, film) => {
   const filmComponent = new FilmCardView(film);
-  const popupElement = new FilmPopupView(film, comments[0]); // КАК ИЗБАВИТЬСЯ ОТ ИНДЕКСА??????
-  // const filmComponentForPopup = filmComponent;//.getElement()// .querySelectorAll('.film-card__poster, .film-card__title, .film-card__comments');
-
-  // for (const clickElement of filmComponent) {
-    // clickElement.addEventListener('click', (evt) =>{
-      // evt.preventDefault();
-      filmComponent.setFilmClickHandler(() => {
-      siteMainElement.appendChild(popupElement.getElement());
-      document.addEventListener('keydown', onEscKeyDown);
-      bodyElement.classList.add('hide-overflow');
-    });
-  // }
+  const popupElement = new FilmPopupView(film, comments[0]);
+  filmComponent.setFilmClickHandler(() => {
+    siteMainElement.appendChild(popupElement.getElement());
+    document.addEventListener('keydown', onEscKeyDown);
+    bodyElement.classList.add('hide-overflow');
+  });
 
   const closePopup = () => {
     siteMainElement.removeChild(popupElement.getElement());
