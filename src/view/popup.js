@@ -1,5 +1,5 @@
 import AbstractView from './abstract.js';
-import { formatDate } from '../util.js';
+import { formatDate } from '../utils/common.js';
 const createPopUp = (film, comment) => {
   const {poster, title, originalTitle, rating, director, screenwriters, cast, releaseDate, duration, country, genre, description, ageRating, comments} = film;
   const {text, emoji, author, dateComment} = comment;
@@ -178,8 +178,18 @@ export default class FilmPopup extends AbstractView {
     super();
     this._film = film;
     this._comment = comment;
+    this._closeFilmClickHandler = this._closeFilmClickHandler.bind(this);
   }
   getTemplate() {
     return createPopUp(this._film, this._comment);
+  }
+  _closeFilmClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.closeFilmClick();
+  }
+
+  setCloseFilmClickHandler(callback) {
+    this._callback.closeFilmClick = callback;
+    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._closeFilmClickHandler);
   }
 }

@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomInRange } from '../util.js';
+import { getRandomInteger, getRandomInRange } from '../utils/common.js';
 import { quantityComments } from './movie-comment.js';
 // функция генерации названий фильма
 export const generateMovieTitle = () => {

@@ -9,7 +9,7 @@ import FooterStatisticView from './view/footer.js';
 import NoFilmView from './view/no-film.js';
 import { generateFilmCards } from './mock/card-for-film.js';
 import { generateComments } from './mock/movie-comment.js';
-import { render, RenderPosition } from './util.js';
+import { render, RenderPosition, remove } from './utils/render.js';
 import { CARDS_MIN_COUNT, FILMS_COUNT, FILM_COUNT_PER_STEP, FILTERS } from './const.js';
 
 const films = new Array(FILMS_COUNT).fill().map(generateFilmCards);
@@ -19,37 +19,30 @@ const siteUserElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 const siteFooterElement = document.querySelector('.footer__statistics');
 
-render(siteUserElement, new UserView().getElement(), RenderPosition.BEFOREEND);
-render(siteMainElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
-render(siteMainElement, new SortView(FILTERS).getElement(), RenderPosition.BEFOREEND);
+render(siteUserElement, new UserView(), RenderPosition.BEFOREEND);
+render(siteMainElement, new SiteMenuView(), RenderPosition.BEFOREEND);
+render(siteMainElement, new SortView(FILTERS), RenderPosition.BEFOREEND);
 
 films.length === 0 ?
-  render(siteMainElement, new NoFilmView().getElement(), RenderPosition.BEFOREEND) :
-  render(siteMainElement, new FilmWrapView().getElement(), RenderPosition.BEFOREEND);
+  render(siteMainElement, new NoFilmView(), RenderPosition.BEFOREEND) :
+  render(siteMainElement, new FilmWrapView(), RenderPosition.BEFOREEND);
 
 const renderFilm = (filmListElement, film) => {
   const filmComponent = new FilmCardView(film);
-  const popupElement = new FilmPopupView(film, comments[0]).getElement(); // КАК ИЗБАВИТЬСЯ ОТ ИНДЕКСА??????
-  const filmComponentForPopup = filmComponent.getElement().querySelectorAll('.film-card__poster, .film-card__title, .film-card__comments');
-
-  for (const clickElement of filmComponentForPopup) {
-    clickElement.addEventListener('click', (evt) =>{
-      evt.preventDefault();
-      siteMainElement.appendChild(popupElement);
-      document.addEventListener('keydown', onEscKeyDown);
-      bodyElement.classList.add('hide-overflow');
-    });
-  }
+  const popupElement = new FilmPopupView(film, comments[0]);
+  filmComponent.setFilmClickHandler(() => {
+    siteMainElement.appendChild(popupElement.getElement());
+    document.addEventListener('keydown', onEscKeyDown);
+    bodyElement.classList.add('hide-overflow');
+  });
 
   const closePopup = () => {
-    siteMainElement.removeChild(popupElement);
+    siteMainElement.removeChild(popupElement.getElement());
     document.removeEventListener('keydown', onEscKeyDown);
     bodyElement.classList.remove('hide-overflow');
   };
 
-  const popupCloseElement = popupElement.querySelector('.film-details__close-btn');
-  popupCloseElement.addEventListener('click', (evt) => {
-    evt.preventDefault();
+  popupElement.setCloseFilmClickHandler(() =>{
     closePopup();
   });
 
@@ -60,7 +53,7 @@ const renderFilm = (filmListElement, film) => {
       document.removeEventListener('keydown', onEscKeyDown);
     }
   };
-  render(filmListElement, filmComponent.getElement(), RenderPosition.BEFOREEND);
+  render(filmListElement, filmComponent, RenderPosition.BEFOREEND);
 };
 
 const filmCardContainer = document.querySelector('.films-list__all');
@@ -74,16 +67,15 @@ for (let i = 0; i < Math.min(films.length, FILM_COUNT_PER_STEP); i++) {
 
 if (films.length > FILM_COUNT_PER_STEP) {
   let renderedFilmsCount = FILM_COUNT_PER_STEP;
-  const loadMoreButtonComponent = new LoadMoreButtonView().getElement();
+  const loadMoreButtonComponent = new LoadMoreButtonView();
   render(containerForButtonShowMore, loadMoreButtonComponent, RenderPosition.BEFOREEND);
-  loadMoreButtonComponent.addEventListener('click', (evt) => {
-    evt.preventDefault();
+  loadMoreButtonComponent.setClickHandler(() => {
     films
       .slice(renderedFilmsCount, renderedFilmsCount + FILM_COUNT_PER_STEP)
       .forEach((film) => renderFilm(filmCardContainer, film));
     renderedFilmsCount += FILM_COUNT_PER_STEP;
     if (renderedFilmsCount >= films.length) {
-      loadMoreButtonComponent.remove();
+      remove(loadMoreButtonComponent);
     }
   });
 }
@@ -92,4 +84,4 @@ for (let i = 0; i < CARDS_MIN_COUNT; i++) {
   renderFilm(filmCardContainerTop, films[i]);
   renderFilm(filmCardContainerMost, films[i]);
 }
-render(siteFooterElement, new FooterStatisticView().getElement(), RenderPosition.BEFOREEND);
+render(siteFooterElement, new FooterStatisticView(), RenderPosition.BEFOREEND);
