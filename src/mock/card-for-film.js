@@ -1,5 +1,6 @@
 import { getRandomInteger, getRandomInRange } from '../utils/common.js';
-import { quantityComments } from './movie-comment.js';
+import { quantityComments, generateComments } from './movie-comment.js';
+import { nanoid } from 'nanoid';
 // функция генерации названий фильма
 export const generateMovieTitle = () => {
   const movieTitle = [
@@ -90,6 +91,7 @@ const getRandomDate = () => {
 // функция генерации карточки фильма_________________________________
 export const generateFilmCards = () => {
   return {
+    id: nanoid(),
     poster: generateMoviePoster(),
     title: generateMovieTitle(),
     originalTitle: generateMovieDescription(),
@@ -98,12 +100,16 @@ export const generateFilmCards = () => {
     screenwriters: writersAndactors,
     cast: writersAndactors,
     releaseDate: getRandomDate(),
-    duration: getRandomDate(),  // `${resultHour}h ${resultMinute}m`
+    duration: getRandomDate(),
     country: generateCountry(),
     genre: generateMovieGenre(),
     description: generateMovieDescription(),
     ageRating: generateAgeRating(),
+    isWatchlist: Boolean(getRandomInteger(0, 1)),
+    isWatched: Boolean(getRandomInteger(0, 1)),
+    isFavorite: Boolean(getRandomInteger(0, 1)),
     comments: quantityComments(),
+    commentsList: new Array(5).fill().map(generateComments),
   };
 };
 // функция генерации карточки фильма_________________________________

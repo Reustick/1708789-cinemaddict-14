@@ -1,99 +1,125 @@
+import SiteMenuView from '../view/menu.js';
+import UserView from '../view/user.js';
 import SortView from '../view/sort.js';
+import FooterStatisticView from '../view/footer.js';
 import LoadMoreButtonView from '../view/button-show-more.js';
 import FilmWrapView from '../view/film-wrap.js';
 import NoFilmView from '../view/no-film.js';
-import FilmCardView  from '../view/film-card.js';
-import FilmPopupView from '../view/popup.js';
-import { generateFilmCards } from '../mock/card-for-film.js';
-import { generateComments } from '../mock/movie-comment.js';
 import { render, RenderPosition, remove } from '../utils/render.js';
-import { CARDS_MIN_COUNT, FILMS_COUNT, FILM_COUNT_PER_STEP, FILTERS } from '../const.js';
+import { updateItem } from '../utils/common.js';
+import { FILM_COUNT_PER_STEP, SortType } from '../const.js';
+import { generateFilter } from '../mock/filter.js';
+import FilmPresenter from './movie.js';
 
 export default class MovieList {
   constructor(movieContainer) {
     this._movieContainer = movieContainer;
+    this._siteUserElement = document.querySelector('.header');
+    this._siteFooterElement = document.querySelector('.footer__statistics');
 
-    this._filmWrapComponent = new FilmWrapView();
+    this._filmWrapComponent = new FilmWrapView().getElement().querySelector('.films-list__all');
     this._sortComponent = new SortView();
     this._noFilmComponent = new NoFilmView();
+    this._menuComponent = new SiteMenuView();
+    this._userComponent = new UserView();
+    this._footerComponent = new FooterStatisticView();
+    this._loadMoreButtonComponent = new LoadMoreButtonView();
+
+    this._renderedFilmCount = FILM_COUNT_PER_STEP;
+    this._filmPresenter = {};
+    this._currentSortType = SortType.DEFAULT;
+
+    this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
+    this._handleFilmChange = this._handleFilmChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+
+    // this._filters = generateFilter(this._films);
   }
 
-  init(films, comments) {
+  init(films) {
     this._films = films.slice();
-    this._filmCardComponent = new FilmCardView(films);
-    this._popupComponent = new FilmPopupView(films,comments);
-    // Метод для инициализации (начала работы) модуля,
-    // малая часть текущей функции renderBoard в main.js
-    // render(this._movieContainer, this._filmWrapComponent, RenderPosition.BEFOREEND);
+    this._sourcedFilms = films.slice();
+    render(this._movieContainer, this._filmWrapComponent, RenderPosition.BEFOREEND);
     this._renderFilmWrap();
   }
 
+  _handleModeChange() {
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.resetView());
+  }
+
+  _handleFilmChange(updatedFilm) {
+    this._films = updateItem(this._films, updatedFilm);
+    this._sourcedFilms = updateItem(this._sourcedFilms, updatedFilm);
+    this._filmPresenter[updatedFilm.id].init(updatedFilm);
+  }
+
+  _renderMenu() {
+    render(this._movieContainer, this._menuComponent, RenderPosition.AFTERBEGIN);
+  }
+
+  _renderUser() {
+    render(this._siteUserElement, this._userComponent, RenderPosition.BEFOREEND);
+  }
+
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+    this._sortFilms(sortType);
+    this._clearFilmList();
+    this._renderFilmList();
+  }
+
   _renderSort() {
-    // Метод для рендеринга сортировки
     render(this._movieContainer, this._sortComponent, RenderPosition.AFTERBEGIN);
+    this._sortComponent.setSortTypeClickHandler(this._handleSortTypeChange);
+  }
+
+  _renderFooter() {
+    render(this._siteFooterElement, this._footerComponent, RenderPosition.BEFOREEND);
   }
 
   _renderFilm(film) {
-    // Метод, куда уйдёт логика созданию и рендерингу компонетов задачи,
-    // текущая функция renderTask в main.js
-    const bodyElement = document.querySelector('body');
-    const siteMainElement = document.querySelector('.main');
-    // const filmComponent = new FilmCardView(film);
-    // const popupElement = new FilmPopupView(film/*, comments[0]*/);
-    this._filmCardComponent.setFilmClickHandler(() => {
-      siteMainElement.appendChild(this._popupComponent);
-      document.addEventListener('keydown', onEscKeyDown);
-      bodyElement.classList.add('hide-overflow');
-    });
-
-    const closePopup = () => {
-      siteMainElement.removeChild(this._popupComponent);
-      document.removeEventListener('keydown', onEscKeyDown);
-      bodyElement.classList.remove('hide-overflow');
-    };
-
-    this._popupComponent.setCloseFilmClickHandler(() =>{
-      closePopup();
-    });
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        closePopup();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-    render(this._filmWrapComponent, this._filmCardComponent, RenderPosition.BEFOREEND);
+    const filmPresenter = new FilmPresenter(this._filmWrapComponent, this._handleFilmChange, this._handleModeChange);
+    filmPresenter.init(film, film.commentsList);
+    this._filmPresenter[film.id] = filmPresenter;
   }
 
   _renderFilms(from, to) {
-    // Метод для рендеринга N-задач за раз
     this._films
       .slice(from, to)
       .forEach((film) => this._renderFilm(film));
   }
 
   _renderNoFilms() {
-    // Метод для рендеринга заглушки
     render(this._filmWrapComponent, this._noFilmComponent, RenderPosition.AFTERBEGIN);
   }
 
-  _renderLoadMoreButton() {
-    // Метод, куда уйдёт логика по отрисовке компонетов задачи,
-    // текущая функция renderTask в main.js
-    let renderedFilmsCount = FILM_COUNT_PER_STEP;
-    const loadMoreButtonComponent = new LoadMoreButtonView();
-    render(this._filmWrapComponent, loadMoreButtonComponent, RenderPosition.BEFOREEND);
-    loadMoreButtonComponent.setClickHandler(() => {
-    this._films
-      .slice(renderedFilmsCount, renderedFilmsCount + FILM_COUNT_PER_STEP)
-      .forEach((film) => this._renderFilm(film));
-      renderedFilmsCount += FILM_COUNT_PER_STEP;
-      if (renderedFilmsCount >= this._films.length) {
-      remove(loadMoreButtonComponent);
-      }
-    });
+  _handleLoadMoreButtonClick() {
+    this._renderFilms(this._renderedFilmCount, this._renderedFilmCount + FILM_COUNT_PER_STEP);
+    this._renderedFilmCount += FILM_COUNT_PER_STEP;
+    if (this._renderedFilmCount >= this._films.length) {
+      remove(this._loadMoreButtonComponent);
+    }
   }
+
+  _renderLoadMoreButton() {
+    render(this._movieContainer, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
+    this._loadMoreButtonComponent.setClickHandler(this._handleLoadMoreButtonClick);
+  }
+
+  _clearFilmList() {
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._filmPresenter = {};
+    this._renderedFilmCount = FILM_COUNT_PER_STEP;
+    remove(this._loadMoreButtonComponent);
+  }
+
   _renderFilmList(){
     this._renderFilms(0, Math.min(this._films.length, FILM_COUNT_PER_STEP));
 
@@ -102,10 +128,28 @@ export default class MovieList {
     }
   }
   _renderFilmWrap() {
-    // Метод для инициализации (начала работы) модуля,
-    // бОльшая часть текущей функции renderBoard в main.js
-    this._films.length === 0 ? this._renderNoFilms() : this._renderFilm();
-    this._renderSort();
+    if (this._films.length === 0) {
+      this._renderNoFilms();
+      return;
+    }
     this._renderFilmList();
+    this._renderSort();
+    this._renderMenu(/*this._filters*/);
+    this._renderUser();
+    this._renderFooter();
+  }
+
+  _sortFilms(sortType) {
+    switch (sortType) {
+      case SortType.BY_DATE:
+        this._films.sort((filmA, filmB) => {return filmB.releaseDate - filmA.releaseDate;});
+        break;
+      case SortType.BY_RATING:
+        this._films.sort((filmA, filmB) => {return filmB.rating - filmA.rating;});
+        break;
+      default:
+        this._films = this._sourcedFilms.slice();
+    }
+    this._currentSortType = sortType;
   }
 }

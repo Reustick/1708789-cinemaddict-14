@@ -1,18 +1,48 @@
 import AbstractView from './abstract.js';
-const createSortTemplate = (filters) => {
-  return `<ul class="sort">${
-    filters.map((filter,idx)=>{
-      return `<li><a href="#" class="sort__button ${idx == 0 ? 'sort__button--active' : ''}">${filter.title}</a></li>`;
-    }).join('')
-  }
-  </ul>`;
+import { SortType } from '../const.js';
+const createSortTemplate = () => {
+  return (
+    `<ul class="sort">
+      <li><a href="#" class="sort__button sort__button--active" data-sort-type="${SortType.DEFAULT}">Sort by default</a></li>
+      <li><a href="#" class="sort__button" data-sort-type="${SortType.BY_DATE}">Sort by date</a></li>
+      <li><a href="#" class="sort__button" data-sort-type="${SortType.BY_RATING}">Sort by rating</a></li>
+    </ul>`
+  );
 };
 export default class Sort extends AbstractView {
-  constructor(filters) {
+  constructor() {
     super();
-    this._filters = filters;
+
+    this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
+
   getTemplate() {
-    return createSortTemplate(this._filters);
+    return createSortTemplate();
   }
+
+  setSortTypeClickHandler(callback) {
+    this._callback.clickSortType = callback;
+    this.getElement().addEventListener('click', this._sortTypeChangeHandler);
+  }
+
+  _removeButtonActive() {
+    this.getElement().querySelector('.sort__button.sort__button--active').classList.remove('sort__button--active');
+  }
+
+  _sortTypeChangeHandler(evt) {
+    const theTarget = evt.target;
+    if (theTarget.tagName !== 'A') {
+      return;
+    }
+
+    evt.preventDefault();
+
+    if (!theTarget.classList.contains('sort__button--active')) {
+      this._removeButtonActive();
+      theTarget.classList.add('sort__button--active');
+    }
+
+    this._callback.clickSortType(theTarget.dataset.sortType);
+  }
+
 }
