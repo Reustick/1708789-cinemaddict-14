@@ -9,8 +9,9 @@ import StatisticsView from './view/statistics.js';
 import { FilterType, UpdateType } from './const.js';
 import Api from './api.js';
 import { render, remove } from './utils/render.js';
+import { makeWord } from './utils/common.js';
 
-const AUTHORIZATION = 'Basic 99rr69reustick1703';
+const AUTHORIZATION = `Basic ${makeWord()}`;
 const END_POINT = 'https://14.ecmascript.pages.academy/cinemaddict';
 
 const siteMainElement = document.querySelector('.main');

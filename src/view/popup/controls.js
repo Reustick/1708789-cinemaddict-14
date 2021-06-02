@@ -9,7 +9,7 @@ const createControlTemplate = (name, title, isChecked = false) => (
    <label for="${name}" class="film-details__control-label film-details__control-label--${name}">${title}</label>`
 );
 
-const createControlsTemplate = (film) => {
+export const createControlsTemplate = (film) => {
   const {
     isWatchlist,
     isWatched,
@@ -24,5 +24,3 @@ const createControlsTemplate = (film) => {
     </section>`
   );
 };
-
-export { createControlsTemplate };
