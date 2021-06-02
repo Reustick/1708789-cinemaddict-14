@@ -5,9 +5,15 @@ const SortType = {
   BY_DATE: 'by-date',
   BY_RATING: 'by-rating',
 };
+const EMOJIS = [
+  'smile',
+  'sleeping',
+  'puke',
+  'angry',
+];
 
 export {
   FILMS_COUNT,
   FILM_COUNT_PER_STEP,
-  SortType
+  SortType, EMOJIS
 };

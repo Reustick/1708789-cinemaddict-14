@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomInRange } from '../utils/common.js';
+import { getRandomInteger, getRandomInRange, getNewArray, getShuffledArray } from '../utils/common.js';
 import { quantityComments, generateComments } from './movie-comment.js';
 import { nanoid } from 'nanoid';
 // функция генерации названий фильма
@@ -68,18 +68,35 @@ const randomDay = getRandomInteger(1,31);
 const day = new Date().getDay();
 export const resultDay = getRandomInteger(day - randomDay, day);
 // функция генерации жанра
-export const generateMovieGenre = () => {
-  const movieGenre = [
-    'Tragicomedy',
-    'Comedy',
-    'Action',
-    'Neo-noir',
-    'Drama',
-    'Autobiography',
-    'Thriller',
-  ];
-  const randomIndexGenre = getRandomInteger(0, movieGenre.length - 1);
-  return movieGenre[randomIndexGenre];
+// export const generateMovieGenre = () => {
+//   const movieGenre = [
+//     'Tragicomedy',
+//     'Comedy',
+//     'Action',
+//     'Neo-noir',
+//     'Drama',
+//     'Autobiography',
+//     'Thriller',
+//   ];
+//   const randomIndexGenre = getRandomInteger(0, movieGenre.length - 1);
+//   return movieGenre[randomIndexGenre, randomIndexGenre, randomIndexGenre];
+// };
+
+const GENRES = [
+  'Tragicomedy',
+  'Comedy',
+  'Action',
+  'Neo-noir',
+  'Drama',
+  'Autobiography',
+  'Thriller',
+];
+
+const generateGenres = () => {
+  const genresRandom = getRandomInteger(1, 3);
+  const newArray = getNewArray(GENRES, genresRandom);
+  const array = getShuffledArray(newArray);
+  return array;
 };
 // функция генерации рандомного времени
 const getRandomDate = () => {
@@ -94,22 +111,22 @@ export const generateFilmCards = () => {
     id: nanoid(),
     poster: generateMoviePoster(),
     title: generateMovieTitle(),
-    originalTitle: generateMovieDescription(),
-    rating: getRandomInRange(1,9,1),
+    alternativeTitle: generateMovieDescription(),
+    totalRating: getRandomInRange(1,9,1),
     director: generateDirector(),
-    screenwriters: writersAndactors,
-    cast: writersAndactors,
-    releaseDate: getRandomDate(),
-    duration: getRandomDate(),
+    writers: writersAndactors,
+    actors: writersAndactors,
+    date: getRandomDate(),
+    runtime: getRandomDate(),
     country: generateCountry(),
-    genre: generateMovieGenre(),
+    genres: generateGenres(),
     description: generateMovieDescription(),
     ageRating: generateAgeRating(),
     isWatchlist: Boolean(getRandomInteger(0, 1)),
     isWatched: Boolean(getRandomInteger(0, 1)),
     isFavorite: Boolean(getRandomInteger(0, 1)),
-    comments: quantityComments(),
-    commentsList: new Array(5).fill().map(generateComments),
+    // comments: quantityComments(),
+    comments: new Array(5).fill().map(generateComments),
   };
 };
 // функция генерации карточки фильма_________________________________

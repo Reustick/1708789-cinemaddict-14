@@ -6,7 +6,7 @@ export const generateComments = () => {
     text: generateMovieDescription(),
     emoji: generateEmoticons(),
     author: generateAuthor(),
-    dateComment:`${resultYear}/${resultMonth}/${resultDay} ${resultHour}:${resultMinute}`,
+    date:`${resultYear}/${resultMonth}/${resultDay} ${resultHour}:${resultMinute}`,
   };
 };
 export const quantityComments = () =>{
@@ -15,10 +15,10 @@ export const quantityComments = () =>{
 // функция генерации смайлика
 const generateEmoticons = () => {
   const emoticons = [
-    './images/emoji/angry.png',
-    './images/emoji/puke.png',
-    './images/emoji/sleeping.png',
-    './images/emoji/smile.png',
+    'smile',
+    'sleeping',
+    'puke',
+    'angry',
   ];
   const randomIndexEmoticons = getRandomInteger(0, emoticons.length - 1);
   return emoticons[randomIndexEmoticons];

@@ -1,23 +1,53 @@
 import AbstractView from './abstract.js';
+import { getTimeFromMins }  from '../utils/format-date.js';
+import { truncateText }  from '../utils/common.js';
+const MAX_DESCRIPTION_LENGTH = 140;
+
+const GENRE_MAIN = 0;
+
+const createControlButtonTemplate = (name, title, isActive = false) => {
+  const activeClass = isActive ? 'film-card__controls-item--active' : '';
+  return (
+    `<button class="film-card__controls-item button film-card__controls-item--${name} ${activeClass}">
+      ${title}
+    </button>`
+  );
+};
+
 const createFilmCard = (film) => {
-  const {poster,title, rating, releaseDate, duration, genre, description, comments} = film;
-  return `<article class="film-card">
-  <h3 class="film-card__title">${title}</h3>
-  <p class="film-card__rating">${rating}</p>
-  <p class="film-card__info">
-    <span class="film-card__year">${releaseDate.getFullYear()}</span>
-    <span class="film-card__duration">${duration.getHours()}h ${duration.getMinutes()}m</span>
-    <span class="film-card__genre">${genre}</span>
-  </p>
-  <img src="${poster}" alt="" class="film-card__poster">
-  <p class="film-card__description">${description}</p>
-  <a class="film-card__comments">${comments.length} comments</a>
-  <div class="film-card__controls">
-    <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
-    <button class="film-card__controls-item button film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
-    <button class="film-card__controls-item button film-card__controls-item--favorite" type="button">Mark as favorite</button>
-  </div>
-</article>`;
+  const {
+    title,
+    totalRating,
+    date,
+    runtime,
+    genres,
+    poster,
+    description,
+    comments,
+    isWatchlist,
+    isWatched,
+    isFavorite,
+  } = film;
+
+  return (
+    `<article class="film-card">
+      <h3 class="film-card__title">${title}</h3>
+      <p class="film-card__rating">${totalRating}</p>
+      <p class="film-card__info">
+        <span class="film-card__year">${date.getFullYear()}</span>
+        <span class="film-card__duration">${getTimeFromMins(runtime)}</span>
+        <span class="film-card__genre">${genres[GENRE_MAIN]}</span>
+      </p>
+      <img src="${poster}" alt="" class="film-card__poster">
+      <p class="film-card__description">${truncateText(description, MAX_DESCRIPTION_LENGTH)}</p>
+      <a class="film-card__comments">${comments.length} comments</a>
+      <div class="film-card__controls">
+        ${createControlButtonTemplate('add-to-watchlist', 'Add to watchlist', isWatchlist)}
+        ${createControlButtonTemplate('mark-as-watched', 'Mark as watched', isWatched)}
+        ${createControlButtonTemplate('favorite', 'Mark as favorite', isFavorite)}
+      </div>
+    </article>`
+  );
 };
 
 export default class FilmCard extends AbstractView {

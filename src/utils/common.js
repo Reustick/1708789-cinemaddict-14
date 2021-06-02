@@ -28,3 +28,31 @@ export const updateItem = (items, update) => {
     ...items.slice(index + 1),
   ];
 };
+
+export const truncateText = (text, maxLength) =>
+  text.length > maxLength
+    ? `${text.slice(0, maxLength - 1)}…`
+    : text;
+
+
+export const getСapitalLetter = (word) => (
+  `${word[0].toUpperCase()}${word.slice(1)}`
+);
+
+export const getNewArray = (array, randomNumber) => {
+  const someArray = [];
+  for (let i = 0; i <= randomNumber; i++) {
+    someArray.push(array[i]);
+  }
+  const newArray = new Set(someArray);
+  return Array.from(newArray);
+};
+
+export const getShuffledArray = (arr) => {
+  const newArr = arr.slice();
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const rand = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[rand]] = [newArr[rand], newArr[i]];
+  }
+  return newArr;
+};

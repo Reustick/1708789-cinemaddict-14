@@ -13,7 +13,7 @@ export default class Film {
     this._changeData = changeData;
     this._changeMode = changeMode;
 
-    this._filmComponent = null;
+    this._filmCardComponent = null;
     this._popupComponent = null;
     this._mode = Mode.CLOSE;
 
@@ -29,17 +29,17 @@ export default class Film {
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
   }
 
-  init(film, comment) {
+  init(film) {
     this._film = film;
 
     const prevFilmCardComponent = this._filmCardComponent;
     const prevPopupComponent = this._popupComponent;
 
     this._filmCardComponent = new FilmCardView(film);
-    this._popupComponent = new FilmPopupView(film,comment[0]);
+    this._popupComponent = new FilmPopupView(film);
 
     this._filmCardComponent.setFilmClickHandler(this._handleFilmClick);
-    this._popupComponent.setCloseFilmClickHandler(this._handleCloseFilmClick);
+    this._popupComponent.setCloseButtonClickHandler(this._handleCloseFilmClick);
 
     this._filmCardComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._filmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
@@ -80,7 +80,7 @@ export default class Film {
     this._popupComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._popupComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._popupComponent.setWatchedClickHandler(this._handleWatchedClick);
-    this._popupComponent.setCloseFilmClickHandler(this._handleCloseFilmClick);
+    this._popupComponent.setCloseButtonClickHandler(this._handleCloseFilmClick);
   }
 
   _handleFilmClick() {
@@ -99,6 +99,7 @@ export default class Film {
     this._siteMainElement.removeChild(this._popupComponent.getElement());
     document.removeEventListener('keydown', this._escKeyDownHandler);
     this._bodyElement.classList.remove('hide-overflow');
+    this._popupComponent.reset(this._film);
     this._mode = Mode.CLOSE;
   }
   _escKeyDownHandler(evt) {
