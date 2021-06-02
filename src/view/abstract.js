@@ -1,4 +1,5 @@
-import {createElement} from '../utils/render.js';
+import {createElement} from '../utils/render.js';  //  'visually-hidden'
+
 export default class Abstract {
   constructor() {
     if (new.target === Abstract) {

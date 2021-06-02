@@ -1,7 +1,9 @@
 import AbstractView from './abstract.js';
 
 const createStatisticsTemplate = (filmCount) => {
-  return `<p>${filmCount} movies inside</p>`;
+  return (
+    `<p>${filmCount} movies inside</p>`
+  );
 };
 
 export default class Statistics extends AbstractView {
