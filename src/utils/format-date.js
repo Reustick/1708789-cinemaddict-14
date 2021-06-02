@@ -5,9 +5,9 @@ dayjs.extend(relativeTime);
 
 const MINUTES_PER_HOUR = 60;
 
-const formatReleaseDate = (date) => dayjs(date).format('D MMMM YYYY');
+export const formatReleaseDate = (date) => dayjs(date).format('D MMMM YYYY');
 
-const getTimeFromMins = (mins) => {
+export const getTimeFromMins = (mins) => {
   const hours = Math.trunc(mins/MINUTES_PER_HOUR);
   const minutes = mins % MINUTES_PER_HOUR;
   if (mins > MINUTES_PER_HOUR) {
@@ -17,8 +17,6 @@ const getTimeFromMins = (mins) => {
   return minutes + 'm';
 };
 
-const getCommentDate = (date) => {
+export const getCommentDate = (date) => {
   return dayjs().to(dayjs(date));
 };
-
-export { formatReleaseDate, getTimeFromMins, getCommentDate };
